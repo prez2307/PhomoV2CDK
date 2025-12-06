@@ -74,8 +74,8 @@ export class AuthStack extends cdk.Stack {
       // User invitation
       userInvitation: {
         emailSubject: 'Welcome to Phomo!',
-        emailBody: 'Your temporary password is {####}',
-        smsMessage: 'Your Phomo verification code is {####}',
+        emailBody: 'Your username is {username} and temporary password is {####}',
+        smsMessage: 'Your Phomo username is {username} and temporary password is {####}',
       },
 
       // SMS configuration - uses default IAM role for SNS
