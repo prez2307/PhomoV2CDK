@@ -13,7 +13,7 @@ export class PhomoStage extends cdk.Stage {
     const { stageName } = props;
 
     // Auth Stack - Cognito User Pool + Identity Pool
-    new AuthStack(this, `Auth-${stageName}`, {
+    new AuthStack(this, 'Auth', {
       stageName,
     });
 
