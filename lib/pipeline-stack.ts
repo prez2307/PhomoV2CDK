@@ -45,12 +45,12 @@ export class PipelineStack extends cdk.Stack {
         stageName: stageConfig.stageName,
       });
 
-      const stageDeployment = pipeline.addStage(appStage);
+      pipeline.addStage(appStage);
 
-      // Add manual approval for staging and prod
-      if (stageConfig.stageName === 'staging' || stageConfig.stageName === 'prod') {
-        stageDeployment.addPre(new pipelines.ManualApprovalStep(`Approve-${stageConfig.stageName}`));
-      }
+      // TODO: Add manual approval gates when needed
+      // if (stageConfig.stageName === 'staging' || stageConfig.stageName === 'prod') {
+      //   stageDeployment.addPre(new pipelines.ManualApprovalStep(`Approve-${stageConfig.stageName}`));
+      // }
     });
   }
 }
