@@ -18,7 +18,7 @@ export class PipelineStack extends cdk.Stack {
 
     // CDK Pipeline
     const pipeline = new pipelines.CodePipeline(this, 'Pipeline', {
-      pipelineName: 'PhomoV2-Pipeline',
+      pipelineName: 'PhomoV2',
       synth: new pipelines.ShellStep('Synth', {
         input: source,
         commands: [
