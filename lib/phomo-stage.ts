@@ -1,6 +1,6 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { PlaceholderStack } from './stacks/placeholder-stack';
+import { AuthStack } from './stacks/auth-stack';
 
 export interface PhomoStageProps extends cdk.StageProps {
   stageName: string;
@@ -12,15 +12,15 @@ export class PhomoStage extends cdk.Stage {
 
     const { stageName } = props;
 
-    // Placeholder stack for testing pipeline
-    new PlaceholderStack(this, `Placeholder-${stageName}`, {
+    // Auth Stack - Cognito User Pool + Identity Pool
+    new AuthStack(this, `Auth-${stageName}`, {
       stageName,
     });
 
-    // TODO: Add real application stacks here
-    // new AuthStack(this, `Auth-${stageName}`, { stageName });
+    // TODO: Add more stacks here
     // new DatabaseStack(this, `Database-${stageName}`, { stageName });
     // new StorageStack(this, `Storage-${stageName}`, { stageName });
+    // new RekognitionStack(this, `Rekognition-${stageName}`, { stageName });
     // etc.
   }
 }
