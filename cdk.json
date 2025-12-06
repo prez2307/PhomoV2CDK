@@ -1,5 +1,5 @@
 {
-  "app": "npx ts-node --prefer-ts-exts bin/phomo_v2_cdk.ts",
+  "app": "node dist/app.js",
   "watch": {
     "include": [
       "**"

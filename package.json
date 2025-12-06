@@ -2,13 +2,18 @@
   "name": "phomo_v2_cdk",
   "version": "0.1.0",
   "bin": {
-    "phomo_v2_cdk": "bin/phomo_v2_cdk.js"
+    "phomo_v2_cdk": "dist/app.js"
   },
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk": "cdk"
+    "cdk": "cdk",
+    "synth": "cdk synth",
+    "diff": "cdk diff",
+    "deploy:dev": "cdk deploy --all --context stage=dev",
+    "deploy:staging": "cdk deploy --all --context stage=staging",
+    "deploy:prod": "cdk deploy --all --context stage=prod"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
@@ -20,7 +25,9 @@
     "typescript": "~5.6.3"
   },
   "dependencies": {
+    "@aws-cdk/aws-appsync-alpha": "2.59.0-alpha.0",
     "aws-cdk-lib": "2.190.0",
-    "constructs": "^10.0.0"
+    "constructs": "^10.0.0",
+    "dotenv": "^16.4.5"
   }
 }
