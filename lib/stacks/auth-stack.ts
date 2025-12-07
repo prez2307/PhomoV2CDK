@@ -213,7 +213,7 @@ export class AuthStack extends cdk.Stack {
     // ==================== COGNITO DOMAIN ====================
     this.userPool.addDomain('UserPoolDomain', {
       cognitoDomain: {
-        domainPrefix: `phomo-${stageName}`,
+        domainPrefix: `phomov2-${stageName}`,
       },
     });
 
@@ -250,7 +250,7 @@ export class AuthStack extends cdk.Stack {
     });
 
     new cdk.CfnOutput(this, 'UserPoolDomain', {
-      value: `phomo-${stageName}.auth.${this.region}.amazoncognito.com`,
+      value: `phomov2-${stageName}.auth.${this.region}.amazoncognito.com`,
       description: 'Cognito Hosted UI Domain',
       exportName: `Phomo-UserPoolDomain-${stageName}`,
     });
