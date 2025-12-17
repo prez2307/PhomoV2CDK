@@ -1,32 +1,38 @@
-import * as cdk from 'aws-cdk-lib';
-import { Construct } from 'constructs';
-import * as pipelines from 'aws-cdk-lib/pipelines';
-import * as codebuild from 'aws-cdk-lib/aws-codebuild';
-import { PhomoStage } from './phomo-stage';
-import { stages } from '../config/stages';
+import * as cdk from "aws-cdk-lib";
+import { Construct } from "constructs";
+import * as pipelines from "aws-cdk-lib/pipelines";
+import * as codebuild from "aws-cdk-lib/aws-codebuild";
+import { PhomoStage } from "./phomo-stage";
+import { stages } from "../config/stages";
 
 export class PipelineStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
     // GitHub CodeStar connection
-    const githubConnectionArn = 'arn:aws:codestar-connections:us-east-1:948676469219:connection/d95b4a92-691d-4645-a685-c39a5b365ab7';
+    const githubConnectionArn =
+      "arn:aws:codestar-connections:us-east-1:948676469219:connection/d95b4a92-691d-4645-a685-c39a5b365ab7";
 
     // Source: CDK Infrastructure code (with lambdas as submodule)
-    const cdkSource = pipelines.CodePipelineSource.connection('prez2307/PhomoV2CDK', 'main', {
-      connectionArn: githubConnectionArn,
-    });
+    const cdkSource = pipelines.CodePipelineSource.connection(
+      "prez2307/PhomoV2CDK",
+      "main",
+      {
+        connectionArn: githubConnectionArn,
+        codeBuildCloneOutput: true,
+      }
+    );
 
     // CDK Pipeline
-    const pipeline = new pipelines.CodePipeline(this, 'Pipeline', {
-      pipelineName: 'PhomoV2',
-      synth: new pipelines.ShellStep('Synth', {
+    const pipeline = new pipelines.CodePipeline(this, "Pipeline", {
+      pipelineName: "PhomoV2",
+      synth: new pipelines.ShellStep("Synth", {
         input: cdkSource,
         commands: [
-          'git submodule update --init --recursive',
-          'npm ci',
-          'npm run build',
-          'npx cdk synth',
+          "git submodule update --init --recursive",
+          "npm ci",
+          "npm run build",
+          "npx cdk synth",
         ],
       }),
       codeBuildDefaults: {
