@@ -28,6 +28,7 @@ export class PipelineStack extends cdk.Stack {
       pipelineName: "PhomoV2",
       synth: new pipelines.ShellStep("Synth", {
         input: cdkSource,
+        primaryOutputDirectory: "cdk.out",
         commands: [
           "npm ci",
           "npm run build",
