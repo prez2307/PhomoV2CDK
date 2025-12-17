@@ -29,9 +29,9 @@ export class PipelineStack extends cdk.Stack {
       synth: new pipelines.ShellStep("Synth", {
         input: cdkSource,
         commands: [
-          "git submodule update --init --recursive",
           "npm ci",
           "npm run build",
+          "git submodule update --init --recursive",
           "npx cdk synth",
         ],
       }),
