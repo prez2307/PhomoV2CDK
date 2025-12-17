@@ -1,0 +1,163 @@
+# Phomo GraphQL Schema
+# This is the client-facing API contract (not tied directly to DynamoDB schema)
+
+# ==================== TYPES ====================
+
+type User {
+  id: ID!
+  displayName: String
+  profilePhotoUrl: String  # Resolver generates presigned URL
+  phoneNumber: String
+  faceCount: Int
+  createdAt: String!
+}
+
+enum FriendshipStatus {
+  PENDING
+  ACCEPTED
+}
+
+type Friendship {
+  id: ID!
+  user1: User!
+  user2: User!
+  status: FriendshipStatus!
+  requesterId: ID!
+  createdAt: String!
+  acceptedAt: String
+}
+
+type Content {
+  id: ID!
+  owner: User!
+  url: String!  # Resolver generates presigned S3 URL (1hr expiry)
+  thumbUrl: String  # Presigned URL for thumbnail
+  eventId: ID
+  event: Event
+  createdAt: String!
+}
+
+enum RecipientMethod {
+  OWNER
+  FACE_MATCH
+  EVENT
+  MANUAL
+}
+
+type FeedEntry {
+  id: ID!
+  content: Content!
+  method: RecipientMethod!
+  confidence: Float
+  edgeCreatedAt: String!  # When you got access (for feed ordering)
+  contentCreatedAt: String!  # When photo was taken
+}
+
+type FeedConnection {
+  items: [FeedEntry!]!
+  nextToken: String
+}
+
+type Event {
+  id: ID!
+  name: String!
+  owner: User!
+  memberUserIds: [ID!]!
+  members: [User!]!  # Resolver fetches users
+  eventDate: String
+  eventStartTime: String
+  eventEndTime: String
+  createdAt: String!
+}
+
+enum EventMemberRole {
+  OWNER
+  MEMBER
+}
+
+enum EventMemberStatus {
+  INVITED
+  ACCEPTED
+}
+
+type EventMember {
+  id: ID!
+  event: Event!
+  user: User!
+  role: EventMemberRole!
+  status: EventMemberStatus!
+  invitedBy: User
+  joinedAt: String!
+}
+
+# ==================== QUERIES ====================
+
+type Query {
+  # User
+  getUser(userId: ID!): User
+  searchUsers(displayName: String!): [User!]!
+
+  # Friendships
+  getFriendships(userId: ID!, status: FriendshipStatus): [Friendship!]!
+  areFriends(user1Id: ID!, user2Id: ID!): Boolean!
+
+  # Feed
+  getFeed(userId: ID!, limit: Int, nextToken: String): FeedConnection!
+
+  # Content
+  getMyContent(userId: ID!, limit: Int, nextToken: String): [Content!]!
+  getSharedMemories(userId: ID!, friendId: ID!, limit: Int): [Content!]!
+
+  # Events
+  getEvent(eventId: ID!): Event
+  getMyEvents(userId: ID!): [EventMember!]!
+  getEventMembers(eventId: ID!): [EventMember!]!
+
+  # Contact discovery
+  findFriendsByPhone(phoneNumbers: [String!]!): [User!]!
+}
+
+# ==================== MUTATIONS ====================
+
+type Mutation {
+  # User management
+  updateUser(userId: ID!, displayName: String, profilePhotoS3Key: String): User!
+  blockUser(userId: ID!, blockedUserId: ID!): User!
+  unblockUser(userId: ID!, blockedUserId: ID!): User!
+
+  # Friendships
+  sendFriendRequest(fromUserId: ID!, toUserId: ID!): Friendship!
+  acceptFriendRequest(friendshipId: ID!, acceptingUserId: ID!): AcceptFriendshipResult!
+
+  # Content
+  createContent(ownerId: ID!, ownerIdentityId: ID!, s3Key: String!, eventId: ID): Content!
+
+  # Events
+  createEvent(name: String!, ownerId: ID!, eventDate: String, eventStartTime: String, eventEndTime: String): Event!
+  inviteToEvent(eventId: ID!, userId: ID!, inviterId: ID!): EventMember!
+  acceptEventInvite(eventMemberId: ID!, userId: ID!): EventMember!
+}
+
+# ==================== RESULT TYPES ====================
+
+type AcceptFriendshipResult {
+  success: Boolean!
+  friendship: Friendship!
+  newPhotosCount: Int!  # How many photos became visible via retroactive matching
+}
+
+# ==================== SUBSCRIPTIONS ====================
+
+type Subscription {
+  onNewFeedEntry(recipientUserId: ID!): FeedEntry
+    @aws_subscribe(mutations: ["createContent"])
+
+  onFriendRequestReceived(userId: ID!): Friendship
+    @aws_subscribe(mutations: ["sendFriendRequest"])
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
