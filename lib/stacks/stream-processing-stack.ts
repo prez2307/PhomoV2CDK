@@ -28,7 +28,7 @@ export class StreamProcessingStack extends cdk.Stack {
       'FeedEntrySyncFunction',
       {
         functionName: `phomo-feed-entry-sync-${stageName}`,
-        entry: path.join(__dirname, '../lambdas/stream-processing/feed-entry-sync.ts'),
+        entry: path.join(__dirname, '../../../PhomoV2Lambdas/src/stream-processing/feed-entry-sync.ts'),
         handler: 'handler',
         runtime: lambda.Runtime.NODEJS_20_X,
         timeout: cdk.Duration.seconds(10),
@@ -41,6 +41,7 @@ export class StreamProcessingStack extends cdk.Stack {
         bundling: {
           minify: true,
           sourceMap: true,
+          forceDockerBundling: false, // Use local esbuild
         },
       }
     );
