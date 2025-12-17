@@ -28,7 +28,7 @@ export class ScheduledJobsStack extends cdk.Stack {
       'SendEventRemindersFunction',
       {
         functionName: `phomo-send-event-reminders-${stageName}`,
-        entry: path.join(__dirname, '../lambdas/src/scheduled-jobs/send-event-reminders.ts'),
+        entry: path.join(__dirname, '../../../PhomoV2Lambdas/src/scheduled-jobs/send-event-reminders.ts'),
         handler: 'handler',
         runtime: lambda.Runtime.NODEJS_20_X,
         timeout: cdk.Duration.seconds(60), // May need to scan many events
