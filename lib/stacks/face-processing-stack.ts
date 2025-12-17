@@ -71,7 +71,7 @@ export class FaceProcessingStack extends cdk.Stack {
       'ProcessContentFacesFunction',
       {
         functionName: `phomo-process-content-faces-${stageName}`,
-        entry: path.join(__dirname, '../../../PhomoV2Lambdas/src/face-processing/process-content-faces.ts'),
+        entry: path.join(__dirname, '../lambdas/src/face-processing/process-content-faces.ts'),
         handler: 'handler',
         runtime: lambda.Runtime.NODEJS_20_X,
         timeout: cdk.Duration.seconds(30),
@@ -88,7 +88,7 @@ export class FaceProcessingStack extends cdk.Stack {
     // Lambda: Enroll user face for profile photo - SYNC via AppSync
     this.enrollFaceFunction = new lambdaNodejs.NodejsFunction(this, 'EnrollFaceFunction', {
       functionName: `phomo-enroll-face-${stageName}`,
-      entry: path.join(__dirname, '../../../PhomoV2Lambdas/src/face-processing/enroll-face.ts'),
+      entry: path.join(__dirname, '../lambdas/src/face-processing/enroll-face.ts'),
       handler: 'handler',
       runtime: lambda.Runtime.NODEJS_20_X,
       timeout: cdk.Duration.seconds(30),
@@ -106,7 +106,7 @@ export class FaceProcessingStack extends cdk.Stack {
       'RetroactiveMatchFunction',
       {
         functionName: `phomo-retroactive-match-${stageName}`,
-        entry: path.join(__dirname, '../../../PhomoV2Lambdas/src/face-processing/retroactive-match.ts'),
+        entry: path.join(__dirname, '../lambdas/src/face-processing/retroactive-match.ts'),
         handler: 'handler',
         runtime: lambda.Runtime.NODEJS_20_X,
         timeout: cdk.Duration.seconds(60), // Can be slow for many unknown faces
