@@ -120,7 +120,7 @@ export class ApiStack extends cdk.Stack {
       'AcceptFriendshipFunction',
       {
         functionName: `phomo-accept-friendship-${stageName}`,
-        entry: path.join(__dirname, '../../../PhomoV2Lambdas/src/api-resolvers/accept-friendship.ts'),
+        entry: path.join(__dirname, '../lambdas/src/api-resolvers/accept-friendship.ts'),
         handler: 'handler',
         runtime: lambda.Runtime.NODEJS_20_X,
         timeout: cdk.Duration.seconds(90), // Retroactive matching may take time
@@ -140,7 +140,7 @@ export class ApiStack extends cdk.Stack {
       'GetContentUrlFunction',
       {
         functionName: `phomo-get-content-url-${stageName}`,
-        entry: path.join(__dirname, '../../../PhomoV2Lambdas/src/api-resolvers/get-content-url.ts'),
+        entry: path.join(__dirname, '../lambdas/src/api-resolvers/get-content-url.ts'),
         handler: 'handler',
         runtime: lambda.Runtime.NODEJS_20_X,
         timeout: cdk.Duration.seconds(10),
@@ -160,7 +160,7 @@ export class ApiStack extends cdk.Stack {
       'FindFriendsByPhoneFunction',
       {
         functionName: `phomo-find-friends-by-phone-${stageName}`,
-        entry: path.join(__dirname, '../../../PhomoV2Lambdas/src/api-resolvers/find-friends-by-phone.ts'),
+        entry: path.join(__dirname, '../lambdas/src/api-resolvers/find-friends-by-phone.ts'),
         handler: 'handler',
         runtime: lambda.Runtime.NODEJS_20_X,
         timeout: cdk.Duration.seconds(30),

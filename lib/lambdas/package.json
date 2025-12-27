@@ -1,0 +1,18 @@
+{
+  "name": "phomo-v2-lambdas",
+  "version": "1.0.0",
+  "description": "Lambda functions for Phomo V2 backend",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "keywords": ["lambda", "aws", "phomo"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.145",
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.3"
+  }
+}

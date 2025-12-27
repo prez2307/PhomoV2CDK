@@ -13,18 +13,9 @@ export class PipelineStack extends cdk.Stack {
     const githubConnectionArn =
       "arn:aws:codestar-connections:us-east-1:948676469219:connection/d95b4a92-691d-4645-a685-c39a5b365ab7";
 
-    // Source 1: CDK Infrastructure code
+    // Source: CDK Infrastructure code (includes Lambda handlers in lib/lambdas/)
     const cdkSource = pipelines.CodePipelineSource.connection(
       "prez2307/PhomoV2CDK",
-      "main",
-      {
-        connectionArn: githubConnectionArn,
-      }
-    );
-
-    // Source 2: Lambda handler code
-    const lambdaSource = pipelines.CodePipelineSource.connection(
-      "prez2307/PhomoV2Lambdas",
       "main",
       {
         connectionArn: githubConnectionArn,
@@ -36,9 +27,6 @@ export class PipelineStack extends cdk.Stack {
       pipelineName: "PhomoV2",
       synth: new pipelines.ShellStep("Synth", {
         input: cdkSource,
-        additionalInputs: {
-          PhomoV2Lambdas: lambdaSource,
-        },
         commands: [
           "npm ci",
           "npm run build",
